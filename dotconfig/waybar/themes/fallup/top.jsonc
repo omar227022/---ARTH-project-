@@ -1,0 +1,21 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 35,
+    "margin": "5 10 0 10",
+    "modules-left": ["hyprland/workspaces", "cpu", "memory"],
+    "modules-center": ["clock"],
+    "modules-right": ["network", "pulseaudio", "battery"],
+    
+    "hyprland/workspaces": { "format": "{name}" },
+    "cpu": { "format": "المعالج {usage}%" },
+    "memory": { "format": "الرام {percentage}%" },
+    "clock": { "format": "{:%I:%M %p}" },
+    "network": {
+        "format-wifi": "الإنترنت لاسلكي",
+        "format-ethernet": "الإنترنت سلكي",
+        "format-disconnected": "الرادار معطل"
+    },
+    "pulseaudio": { "format": "الصوت {volume}%" },
+    "battery": { "format": "الطاقة {capacity}%" }
+}

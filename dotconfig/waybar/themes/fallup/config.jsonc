@@ -1,0 +1,17 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 38,
+    "modules-left": ["custom/pip", "cpu", "memory", "disk"],
+    "modules-center": ["clock"],
+    "modules-right": ["network", "pulseaudio", "battery", "tray"],
+
+    "custom/pip": { "format": "☢️ بيب-بوي" },
+    "clock": { "format": "{:%I:%M %p} ⏳" },
+    "cpu": { "format": "المعالج: {usage}%" },
+    "memory": { "format": "الذاكرة: {}%" },
+    "disk": { "format": "القرص: {percentage_used}%" },
+    "network": { "format-wifi": "📡 {essid}", "format-disconnected": "⚠️ معطل" },
+    "pulseaudio": { "format": "🔊 {volume}%" },
+    "battery": { "format": "{icon} {capacity}%", "format-icons": ["", "", "", "", ""] }
+}

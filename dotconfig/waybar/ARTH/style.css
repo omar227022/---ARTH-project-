@@ -1,0 +1,27 @@
+@import url("/home/omarb_52/.cache/wal/colors-waybar.css");
+* { 
+    border: none; border-radius: 0; 
+    font-family: "Monocraft", "VT323", "JetBrains Mono Nerd Font";
+    font-size: 15px; /* كبرنا الخط شوي */
+}
+window#waybar { background: transparent; }
+#custom-launcher, #workspaces, #taskbar, #mpris, #cpu, #memory, #battery, #pulseaudio, #network, #clock {
+    background: alpha(@color7, 0.9);
+    color: @color0;
+    border: 1px solid alpha(@color0, 0.1);
+    border-radius: 25px; /* دوران كامل وفخم */
+    padding: 4px 18px;
+    margin: 6px 10px; /* تباعد مريح */
+    font-weight: bold;
+}
+#custom-launcher { 
+    background: @color1; 
+    color: @color7; 
+    font-family: "Monocraft"; /* خط مربعات للتطبيقات */
+}
+#network {
+    font-family: "Monocraft"; /* خط مربعات للنت (سلكي/لاسلكي) */
+}
+#workspaces button { color: @color0; padding: 0 6px; }
+#workspaces button.active { color: @color1; font-weight: 900; }
+#taskbar button { padding: 0 8px; }

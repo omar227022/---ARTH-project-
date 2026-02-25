@@ -1,0 +1,5 @@
+{
+    "layer": "top", "position": "right", "width": 45,
+    "modules-center": ["network"],
+    "network": {"format-wifi": "📡", "format-disconnected": "⚠️"}
+}

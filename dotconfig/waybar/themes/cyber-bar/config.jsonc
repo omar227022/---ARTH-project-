@@ -1,0 +1,21 @@
+{
+    "layer": "top",
+    "position": "bottom",
+    "height": 40,
+    "margin-bottom": 10,
+    "margin-left": 10,
+    "margin-right": 10,
+    "spacing": 8,
+    "modules-left": ["custom/launcher", "cpu", "memory", "custom/media"],
+    "modules-center": ["hyprland/workspaces"],
+    "modules-right": ["pulseaudio", "network", "clock", "custom/power"],
+    "custom/launcher": { "format": "󰀻", "on-click": "rofi -show drun" },
+    "cpu": { "format": " {usage}%" },
+    "memory": { "format": "󰍛 {percentage}%" },
+    "custom/media": { "format": "󰎆 {text}", "max-length": 15, "exec": "playerctl metadata title", "interval": 2 },
+    "hyprland/workspaces": { "format": "{icon}" },
+    "pulseaudio": { "format": "󰕾 {volume}%", "on-click": "pavucontrol" },
+    "network": { "format": "󰖩 {essid}", "max-length": 10 },
+    "clock": { "format": " {:%I:%M}" },
+    "custom/power": { "format": "⏻", "on-click": "wlogout" }
+}

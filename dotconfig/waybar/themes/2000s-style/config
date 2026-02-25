@@ -1,0 +1,45 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 34,
+    "margin-top": 8,
+    "margin-left": 12,
+    "margin-right": 12,
+    "spacing": 4,
+
+    "modules-left": ["custom/launcher", "hyprland/workspaces"],
+    "modules-center": ["clock"],
+    "modules-right": ["mpris", "pulseaudio", "network", "tray"],
+
+    "custom/launcher": {
+        "format": "🫧", 
+        "on-click": "wofi --show drun "
+    },
+
+    "mpris": {
+        "format": " 💿 {artist} - {title} ",
+        "format-paused": " ⏸️ {artist} - {title} ",
+        "max-length": 30,
+        "on-click": "playerctl play-pause"
+    },
+
+    "network": {
+        "format-wifi": "", // أيقونة الواي فاي
+        "format-ethernet": "󰈀", // أيقونة الكيبل
+        "format-disconnected": "󰖪", // أيقونة الانقطاع
+        "tooltip-format": "{essid} ({signalStrength}%)"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%", // قائمة الصوت مع النسبة
+        "format-icons": {
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol" // يفتح لك إعدادات الصوت الكاملة
+    },
+
+    "clock": {
+        "format": "{:%I:%M %p}"
+    }
+}
+

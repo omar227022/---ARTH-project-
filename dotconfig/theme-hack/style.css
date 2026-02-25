@@ -1,0 +1,56 @@
+@import "../../.cache/wal/colors-waybar.css";
+
+* { 
+    border: none; 
+    font-family: "JetBrainsMono Nerd Font"; 
+    font-size: 20px;
+}
+
+window#waybar {
+    background-color: transparent;
+}
+
+#custom-launcher, #workspaces, #custom-media, #network, #bluetooth, #pulseaudio, #clock {
+    background-color: @color2; 
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.2); 
+    border-radius: 20px;
+    margin: 5px 5px;
+    padding: 15px 0;
+}
+
+#custom-launcher {
+    background-color: @color1;
+    font-size: 24px;
+}
+
+#custom-media {
+    background-color: @color3;
+}
+
+#clock {
+    background-color: @color5;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#workspaces {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#workspaces button {
+    color: white;
+    padding: 5px 0;
+}
+
+#workspaces button.active {
+    background-color: @color4;
+    color: white;
+    border-radius: 12px;
+}
+
+/* حركة بسيطة عند التمرير بدون فلسفة خصائص زيادة */
+#custom-launcher:hover, #network:hover, #bluetooth:hover, #pulseaudio:hover, #clock:hover, #custom-media:hover {
+    background-color: white;
+    color: @color1;
+}

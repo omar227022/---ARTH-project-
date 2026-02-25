@@ -1,0 +1,23 @@
+{
+    "layer": "top",
+    "position": "left",
+    "width": 65,
+    "margin": 10,
+    "spacing": 15,
+    "modules-left": ["custom/launcher", "hyprland/workspaces"],
+    "modules-center": ["custom/media"],
+    "modules-right": ["network", "bluetooth", "pulseaudio", "clock"],
+    "custom/launcher": { "format": "󰀻", "on-click": "rofi -show drun" },
+    "hyprland/workspaces": { "orientation": "vertical" },
+    "custom/media": {
+        "format": "{icon}",
+        "return-type": "json",
+        "format-icons": { "Playing": "󰎆", "Paused": "󰏤" },
+        "exec": "playerctl -a metadata --format '{\"text\": \"{{title}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+        "on-click": "playerctl play-pause"
+    },
+    "network": { "format": "󰖩", "on-click": "nm-connection-editor" },
+    "bluetooth": { "format": "󰂯", "on-click": "blueman-manager" },
+    "pulseaudio": { "format": "󰕾", "on-click": "pavucontrol" },
+    "clock": { "format": "{:%I\n%M}" }
+}

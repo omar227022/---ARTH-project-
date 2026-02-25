@@ -1,0 +1,37 @@
+{
+    "layer": "top", "position": "top", "mod": "dock", "height": 36, "margin-top": 5,
+    "modules-left": ["custom/launcher", "hyprland/workspaces", "wlr/taskbar"],
+    "modules-center": ["clock"],
+    "modules-right": ["mpris", "cpu", "memory", "battery", "pulseaudio", "network", "tray"],
+
+    "custom/launcher": {
+        "format": "󰀻 التطبيقات",
+        "on-click": "wofi --show drun || rofi -show drun",
+        "tooltip": false
+    },
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "on-click": "activate"
+    },
+    "wlr/taskbar": {
+        "format": "{icon}", "icon-size": 22, "on-click": "activate"
+    },
+    "mpris": {
+        "format": "󰎆 {title}", 
+        "max-length": 15,
+        "ellipsis": ".."
+    },
+    "cpu": { "format": "󰻠 {usage}%" },
+    "memory": { "format": "󰍛 {percentage}%" },
+    "battery": {
+        "format": "{icon} {capacity}%",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+    "network": { 
+        "format-wifi": " لاسلكي", 
+        "format-ethernet": "󰈀 سلكي",
+        "format-disconnected": "⚠ مفصول" 
+    },
+    "pulseaudio": { "format": "{icon} {volume}%", "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] } },
+    "clock": { "format": "{:%I:%M %p}" }
+}

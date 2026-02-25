@@ -1,0 +1,12 @@
+{
+    "layer": "top",
+    "position": "bottom",
+    "height": 40,
+    "margin": "0 10 5 10",
+    "modules-left": ["custom/launcher"],
+    "modules-center": ["mpris"],
+    "modules-right": ["tray"],
+    
+    "custom/launcher": { "format": "القائمة", "on-click": "rofi -show drun" },
+    "mpris": { "format": "البث: {title}", "max-length": 50 }
+}

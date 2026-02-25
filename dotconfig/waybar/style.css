@@ -1,0 +1,10 @@
+* { border: none; font-family: "JetBrainsMono Nerd Font"; color: #ffffff; }
+window#waybar { background: transparent; }
+.modules-left, .modules-center, .modules-right {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 2px 10px;
+}
+#mpris, #workspaces button.active { color: #50fa7b; }
+#custom-launcher, #clock, #pulseaudio, #network, #cpu, #memory { color: #ffffff; padding: 0 8px; }
