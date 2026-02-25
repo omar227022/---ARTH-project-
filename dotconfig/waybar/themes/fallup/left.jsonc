@@ -1,8 +1,0 @@
-{
-    "layer": "top", "position": "left", "width": 45,
-    "modules-center": ["hyprland/workspaces"],
-    "hyprland/workspaces": {
-        "format": "{name}",
-        "on-click": "activate"
-    }
-}
