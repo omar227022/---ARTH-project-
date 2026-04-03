@@ -1,19 +1,30 @@
 import sys
 import os
 import subprocess
+import shutil
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                              QHBoxLayout, QPushButton, QLabel, QSlider, QStackedWidget, 
-                             QFrame, QGridLayout, QColorDialog, QScrollArea, QTabWidget, QToolButton, QCheckBox, QMessageBox)
+                             QFrame, QGridLayout, QColorDialog, QScrollArea, QTabWidget, QToolButton, QCheckBox, QMessageBox, QFileDialog)
 from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtGui import QIcon, QPixmap, QColor, QCursor
 
 HOME = os.path.expanduser("~")
-USER_FALLUP = os.path.join(HOME, "fallup")
-VIDEO_DIR = os.path.join(HOME, "wallpapers mp4")
-SIMPLE_DIR = os.path.join(HOME, "simple")
-WALL2000_DIR = os.path.join(HOME, "2000s wallpapers")
-ARTH_WALL_DIR = os.path.join(HOME, "ARTH Wallpaper")
-CYBER_DIR = os.path.join(HOME, "cyber")
+
+REPO_DIR = os.path.join(HOME, ".arth_repo_cache")
+if not os.path.exists(REPO_DIR):
+    print("\n" + "="*50)
+    print("اصبر شوي قاعد يحمل الخلفيات من القيت هوب | مع تحيات ارث - ARTH")
+    print("="*50 + "\n")
+    subprocess.run(["git", "clone", "https://github.com/omar227022/---ARTH-project-.git", REPO_DIR])
+
+WALL_BASE = os.path.join(REPO_DIR, "wallpapers")
+
+USER_FALLUP = os.path.join(WALL_BASE, "fallup")
+VIDEO_DIR = os.path.join(WALL_BASE, "wallpapers mp4")
+SIMPLE_DIR = os.path.join(WALL_BASE, "simple")
+WALL2000_DIR = os.path.join(WALL_BASE, "2000s wallpapers")
+ARTH_WALL_DIR = os.path.join(WALL_BASE, "ARTH Wallpaper")
+CYBER_DIR = os.path.join(WALL_BASE, "cyber")
 
 FALLUP_CONF = os.path.join(HOME, ".config/waybar/themes/fallup")
 ARTH_CONF = os.path.join(HOME, ".config/waybar/ARTH")
@@ -22,7 +33,6 @@ SIMPLE_BAR_CONF = os.path.join(HOME, ".config/waybar/simple")
 FF_THEMES = os.path.join(HOME, ".config/fastfetch/themes")
 CACHE_DIR = os.path.join(HOME, ".cache/arth_settings")
 
-# مسار ملف الأنميشن
 ANIM_CONF_FILE = os.path.join(HOME, ".config/hypr/animations.conf")
 
 os.makedirs(CACHE_DIR, exist_ok=True)
@@ -40,8 +50,7 @@ class ArthDashboard(QMainWindow):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
 
-        # متغيرات لحفظ حالة الأنميشن الحالية
-        self.current_anim_template = "bezier = myBezier, 0.05, 0.9, 0.1, 1.05\nanimation = windows, 1, {spd}, myBezier\nanimation = workspaces, 1, {spd}, default"
+        self.current_anim_template = "bezier = bouncy, 0.4, 0.0, 0.2, 1.4\nanimation = windows, 1, {spd}, bouncy, popin 80%\nanimation = workspaces, 1, {spd}, bouncy, slide"
         self.is_anim_enabled = True
 
         self.central_widget = QWidget()
@@ -106,9 +115,37 @@ class ArthDashboard(QMainWindow):
         btn.clicked.connect(lambda: self.pages.setCurrentIndex(index))
         self.sidebar_layout.addWidget(btn)
 
+    def import_wallpaper_folder(self):
+        folder_path = QFileDialog.getExistingDirectory(self, "اختر مجلد الخلفيات", HOME)
+        if folder_path:
+            imported = 0
+            for file_name in os.listdir(folder_path):
+                file_path = os.path.join(folder_path, file_name)
+                if os.path.isfile(file_path):
+                    ext = file_name.lower().split('.')[-1]
+                    if ext in ['mp4', 'gif', 'mkv']:
+                        os.makedirs(VIDEO_DIR, exist_ok=True)
+                        shutil.copy(file_path, VIDEO_DIR)
+                        imported += 1
+                    elif ext in ['png', 'jpg', 'jpeg']:
+                        os.makedirs(ARTH_WALL_DIR, exist_ok=True)
+                        shutil.copy(file_path, ARTH_WALL_DIR)
+                        imported += 1
+            
+            if imported > 0:
+                QMessageBox.information(self, "نجاح", f"تم استيراد {imported} خلفية من المجلد بنجاح. أعد تشغيل الأداة لتحديث المعرض.")
+            else:
+                QMessageBox.warning(self, "تنبيه", "المجلد اللي اخترته ما فيه خلفيات أو فيديوهات مدعومة!")
+
     def init_wallpaper_page(self):
         page = QWidget()
         layout = QVBoxLayout(page)
+        
+        btn_import = QPushButton("إضافة مجلد خلفيات (MP4, GIF, PNG, JPG)")
+        btn_import.setStyleSheet("background-color: #3b82f6; color: #0f172a; font-weight: bold; padding: 10px; margin-bottom: 10px; text-align: center;")
+        btn_import.clicked.connect(self.import_wallpaper_folder)
+        layout.addWidget(btn_import)
+
         tabs = QTabWidget()
         tabs.addTab(self.create_gallery(ARTH_WALL_DIR, "image"), "Arth")
         tabs.addTab(self.create_gallery(SIMPLE_DIR, "image"), "Simple")
@@ -220,21 +257,30 @@ class ArthDashboard(QMainWindow):
         s_blur.valueChanged.connect(self.update_blur_and_passes)
         layout.addWidget(s_blur)
 
-        controls = [("حجم الحدود", "general:border_size"), ("تدوير الحواف", "decoration:rounding")]
-        for label, cmd in controls:
-            layout.addWidget(QLabel(label))
-            s = QSlider(Qt.Orientation.Horizontal); s.setRange(0, 30); s.setValue(5)
-            s.valueChanged.connect(lambda v, c=cmd: subprocess.run(f"hyprctl keyword {c} {v}", shell=True))
-            layout.addWidget(s)
+        layout.addWidget(QLabel("تكبير حجم الحدود"))
+        s_border_size = QSlider(Qt.Orientation.Horizontal)
+        s_border_size.setRange(0, 30)
+        s_border_size.setValue(2)
+        s_border_size.valueChanged.connect(lambda v: subprocess.run(f"hyprctl keyword general:border_size {v}", shell=True))
+        layout.addWidget(s_border_size)
+
+        layout.addWidget(QLabel("تدوير الحواف"))
+        s_round = QSlider(Qt.Orientation.Horizontal)
+        s_round.setRange(0, 30)
+        s_round.setValue(5)
+        s_round.valueChanged.connect(lambda v: subprocess.run(f"hyprctl keyword decoration:rounding {v}", shell=True))
+        layout.addWidget(s_round)
 
         layout.addWidget(QLabel("شفافية النظام"))
         s_trans = QSlider(Qt.Orientation.Horizontal); s_trans.setRange(1, 10); s_trans.setValue(10)
         s_trans.valueChanged.connect(self.set_transparency)
         layout.addWidget(s_trans)
-        layout.addWidget(QLabel("شفافية كيتي"))
-        s_kitty = QSlider(Qt.Orientation.Horizontal); s_kitty.setRange(10, 100); s_kitty.setValue(90)
-        s_kitty.valueChanged.connect(lambda v: subprocess.run(f"hyprctl keyword windowrule 'opacity {v/100.0} override,kitty'", shell=True))
+        
+        layout.addWidget(QLabel("تغميق كيتي"))
+        s_kitty = QSlider(Qt.Orientation.Horizontal); s_kitty.setRange(0, 100); s_kitty.setValue(0)
+        s_kitty.valueChanged.connect(self.set_kitty_darkness)
         layout.addWidget(s_kitty)
+
         layout.addWidget(QLabel("شفافية الحدود"))
         s_border = QSlider(Qt.Orientation.Horizontal); s_border.setRange(0, 100); s_border.setValue(100)
         s_border.valueChanged.connect(self.set_border_alpha)
@@ -248,28 +294,35 @@ class ArthDashboard(QMainWindow):
         btn_adapt.clicked.connect(self.enable_adapt)
         layout.addWidget(btn_adapt); layout.addStretch(); self.pages.addWidget(page)
 
-    # --- بداية تعديل صفحة الأنميشن الجديدة ---
+    def set_kitty_darkness(self, val):
+        dark_val = int(255 * (1 - val/100.0))
+        color = f"#{dark_val:02x}{dark_val:02x}{dark_val:02x}"
+        subprocess.run(f"kitty @ set-colors background='{color}'", shell=True)
+
     def init_animation_page(self):
         page = QWidget(); layout = QVBoxLayout(page); layout.setContentsMargins(30,30,30,30)
-        layout.addWidget(QLabel("إعدادات الأنميشن الحية:", styleSheet="font-size: 20px; color: #3b82f6;"))
+        layout.addWidget(QLabel("إعدادات الأنميشن الحية (ARTH-8):", styleSheet="font-size: 20px; color: #3b82f6;"))
         
-        # الأنماط المتاحة (بدون هادئ)
         self.anim_styles = {
-            "ناعم": "bezier = myBezier, 0.05, 0.9, 0.1, 1.05\nanimation = windows, 1, {spd}, myBezier\nanimation = workspaces, 1, {spd}, default",
-            "سريع": "bezier = fast, 0.3, 0, 0.1, 1\nanimation = windows, 1, {spd}, fast, slide\nanimation = workspaces, 1, {spd}, fast, slide",
-            "ارتدادي": "bezier = bounce, 0.47, 0, 0.745, 0.715\nanimation = windows, 1, {spd}, bounce, popin 80%\nanimation = workspaces, 1, {spd}, bounce, slide",
-            "انزلاقي": "animation = windows, 1, {spd}, default, slide\nanimation = workspaces, 1, {spd}, default, slidevert"
+            "ارتدادي": "bezier = bouncy, 0.4, 0.0, 0.2, 1.4\nanimation = windows, 1, {spd}, bouncy, popin 80%\nanimation = workspaces, 1, {spd}, bouncy, slide",
+            "ناعم": "bezier = smooth, 0.25, 0.1, 0.25, 1.0\nanimation = windows, 1, {spd}, smooth\nanimation = workspaces, 1, {spd}, smooth, slide",
+            "طلقة": "bezier = fast, 0.1, 0.9, 0.1, 1.05\nanimation = windows, 1, {spd}, fast, popin 80%\nanimation = workspaces, 1, {spd}, fast, slide",
+            "خاطف": "bezier = snappy, 0.0, 0.85, 0.15, 1.0\nanimation = windows, 1, {spd}, snappy, slide\nanimation = workspaces, 1, {spd}, snappy, slide",
+            "مطاطي": "bezier = elastic, 0.68, -0.55, 0.265, 1.55\nanimation = windows, 1, {spd}, elastic, popin\nanimation = workspaces, 1, {spd}, elastic, slide",
+            "رايق": "bezier = lazy, 0.5, 0.0, 0.5, 1.0\nanimation = windows, 1, {spd}, lazy\nanimation = workspaces, 1, {spd}, lazy, slidevert",
+            "انزلاقي": "bezier = gliding, 0.1, 1.0, 0.0, 1.0\nanimation = windows, 1, {spd}, gliding, slide\nanimation = workspaces, 1, {spd}, gliding, slide",
+            "حماسي": "bezier = energetic, 0.175, 0.885, 0.32, 1.275\nanimation = windows, 1, {spd}, energetic, popin 70%\nanimation = workspaces, 1, {spd}, energetic, slide"
         }
         
         grid = QGridLayout()
-        for i, name in enumerate(self.anim_styles.keys()):
+        names = list(self.anim_styles.keys())
+        for i, name in enumerate(names):
             btn = QPushButton(name)
             btn.setStyleSheet("background-color: #1e293b; border: 1px solid #334155; text-align: center; height: 50px;")
             btn.clicked.connect(lambda ch, n=name: self.set_anim_style(n))
             grid.addWidget(btn, i // 2, i % 2)
         layout.addLayout(grid)
 
-        # عداد سرعة الأنميشن
         layout.addSpacing(20)
         layout.addWidget(QLabel("سرعة الأنميشن (كل ما قل الرقم زادت السرعة):"))
         self.spd_slider = QSlider(Qt.Orientation.Horizontal)
@@ -278,7 +331,6 @@ class ArthDashboard(QMainWindow):
         self.spd_slider.valueChanged.connect(self.apply_anim_changes)
         layout.addWidget(self.spd_slider)
 
-        # زر الغاء الأنميشن
         layout.addSpacing(20)
         self.toggle_anim_btn = QPushButton("إلغاء تفعيل الأنميشن")
         self.toggle_anim_btn.setStyleSheet("background-color: #ef4444; color: white; font-weight: bold; height: 45px;")
@@ -305,26 +357,24 @@ class ArthDashboard(QMainWindow):
     def apply_anim_changes(self):
         spd = self.spd_slider.value()
         enabled_str = "yes" if self.is_anim_enabled else "no"
-        
-        # تجهيز الكود النهائي
         final_content = f"animations {{\n    enabled = {enabled_str}\n"
         final_content += self.current_anim_template.format(spd=spd)
         final_content += "\n}"
 
-        # 1. حفظ في الملف للأبد
         try:
             with open(ANIM_CONF_FILE, "w") as f:
                 f.write(final_content)
         except: pass
 
-        # 2. تطبيق حي فوراً
         subprocess.run(f"hyprctl keyword animations:enabled {'1' if self.is_anim_enabled else '0'}", shell=True)
         if self.is_anim_enabled:
-            # نطبق الأسطر سطر سطر للـ hyprctl
             lines = self.current_anim_template.format(spd=spd).split('\n')
             for line in lines:
-                if line.strip(): subprocess.run(f"hyprctl keyword {line.strip()}", shell=True)
-    # --- نهاية تعديل الأنميشن ---
+                if line.strip() and "=" in line:
+                    parts = line.split("=", 1)
+                    key = parts[0].strip()
+                    val = parts[1].strip()
+                    subprocess.run(f"hyprctl keyword {key} '{val}'", shell=True)
 
     def set_border_alpha(self, val):
         alpha = hex(int(val * 2.55))[2:].zfill(2)
