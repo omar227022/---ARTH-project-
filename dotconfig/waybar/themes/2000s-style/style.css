@@ -1,8 +1,9 @@
-/* --- Ultimate Crystal 2000s Edition --- */
 
+@import "colors.css";
 * {
     border: none;
     font-family: "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 16px;
     font-weight: 900;
 }
 
@@ -10,29 +11,22 @@ window#waybar {
     background: rgba(255, 255, 255, 0.12); 
     border-radius: 18px;
     border: 1.5px solid rgba(255, 255, 255, 0.4);
-    
-    /* زيادة الإضاءة الداخلية (Glow) */
     box-shadow: 
         inset 0 0 20px rgba(255, 255, 255, 0.5), 
         0 4px 15px rgba(0, 0, 0, 0.2);
-    
     margin: 8px 12px;
 }
 
-/* الأيقونات والنصوص بالرمادي الفاتح الفخم */
 #custom-launcher, #clock, #network, #pulseaudio, #workspaces button, #mpris {
-    color: #e0e0e0; /* رمادي فاتح صراي */
+    color: #e0e0e0;
     background: rgba(255, 255, 255, 0.15);
     border-radius: 14px;
     margin: 4px 4px;
-    padding: 0 12px;
+    padding: 2px 14px;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    
-    /* وهج خفيف للنصوص والأيقونات */
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }
 
-/* أنميشن الفقاعات لزر الموسيقى إذا اشتغلت */
 #mpris.playing {
     background: linear-gradient(0deg, 
         rgba(255,255,255,0) 0%, 
@@ -49,16 +43,13 @@ window#waybar {
     100% { background-position: 0% -100%; }
 }
 
-/* تمييز الورك سبيس النشط */
 #workspaces button.active {
     background: rgba(255, 255, 255, 0.4);
     color: #ffffff;
     box-shadow: inset 0 0 10px white;
 }
 
-/* تأثير التمرير (Hover) */
 #workspaces button:hover, #custom-player:hover, #pulseaudio:hover {
     background: rgba(255, 255, 255, 0.3);
     transition: 0.4s;
 }
-
