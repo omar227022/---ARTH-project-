@@ -11,12 +11,6 @@ from PyQt6.QtGui import QIcon, QPixmap, QColor, QCursor
 HOME = os.path.expanduser("~")
 
 REPO_DIR = os.path.join(HOME, ".arth_repo_cache")
-if not os.path.exists(REPO_DIR):
-    print("\n" + "="*50)
-    print("اصبر شوي قاعد يحمل الخلفيات من القيت هوب | مع تحيات ارث - ARTH")
-    print("="*50 + "\n")
-    subprocess.run(["git", "clone", "https://github.com/omar227022/---ARTH-project-.git", REPO_DIR])
-
 WALL_BASE = os.path.join(REPO_DIR, "wallpapers")
 
 USER_FALLUP = os.path.join(WALL_BASE, "fallup")
@@ -35,12 +29,82 @@ CACHE_DIR = os.path.join(HOME, ".cache/arth_settings")
 
 ANIM_CONF_FILE = os.path.join(HOME, ".config/hypr/animations.conf")
 
-os.makedirs(CACHE_DIR, exist_ok=True)
-os.makedirs(FF_THEMES, exist_ok=True)
-
 LAST_BAR_FILE = os.path.join(CACHE_DIR, "last_waybar_type")
 ADAPT_FILE = os.path.join(CACHE_DIR, "border_adapt_mode")
 WAYBAR_ADAPT_FILE = os.path.join(CACHE_DIR, "waybar_adapt_mode")
+
+def check_and_install_dependencies():
+    packages = {
+        "waybar": "waybar",
+        "hyprctl": "hyprland",
+        "wal": "python-pywal",
+        "swww": "swww",
+        "mpvpaper": "mpvpaper",
+        "fastfetch": "fastfetch",
+        "kitty": "kitty",
+        "playerctl": "playerctl"
+    }
+    
+    missing_cmds = [cmd for cmd in packages.keys() if shutil.which(cmd) is None]
+    
+    if missing_cmds:
+        missing_pkgs = [packages[cmd] for cmd in missing_cmds]
+        print("\n" + "="*50)
+        print("فيه حزم ناقصة لتشغيل ARTH OS، جاري التثبيت...")
+        print("="*50 + "\n")
+        
+        try:
+            if shutil.which("paru"):
+                subprocess.run(["paru", "-S", "--noconfirm"] + missing_pkgs)
+            elif shutil.which("yay"):
+                subprocess.run(["yay", "-S", "--noconfirm"] + missing_pkgs)
+            else:
+                subprocess.run(["sudo", "pacman", "-S", "--noconfirm"] + missing_pkgs)
+        except Exception as e:
+            print(f"فشل التثبيت التلقائي: {e}")
+
+def setup_repo():
+    if not os.path.exists(REPO_DIR):
+        print("\n" + "="*50)
+        print("اصبر شوي قاعد يحمل الخلفيات من القيت هوب | مع تحيات ارث - ARTH")
+        print("="*50 + "\n")
+        subprocess.run(["git", "clone", "https://github.com/omar227022/---ARTH-project-.git", REPO_DIR])
+
+def setup_waybar_colors():
+    wal_file = os.path.join(HOME, ".cache/wal/colors-waybar.css")
+    if not os.path.exists(wal_file):
+        return
+
+    theme_dirs = [
+        os.path.join(HOME, ".config/waybar"),
+        os.path.join(HOME, ".config/waybar/themes"),
+        os.path.join(HOME, ".config/waybar/ARTH"),
+        os.path.join(HOME, ".config/theme-hack"),
+    ]
+
+    for base in theme_dirs:
+        if not os.path.exists(base):
+            continue
+
+        for root, dirs, files in os.walk(base):
+            if "style.css" in files:
+                colors_path = os.path.join(root, "colors.css")
+                style_file = os.path.join(root, "style.css")
+                try:
+                    if os.path.exists(colors_path) or os.path.islink(colors_path):
+                        os.remove(colors_path)
+                    os.symlink(wal_file, colors_path)
+
+                    with open(style_file, "r", encoding="utf-8") as f:
+                        content = f.read()
+
+                    if '@import "colors.css";' not in content:
+                        lines = [line for line in content.splitlines() if "colors-waybar.css" not in line and "colors.css" not in line]
+                        lines.insert(0, '@import "colors.css";')
+                        with open(style_file, "w", encoding="utf-8") as f:
+                            f.write("\n".join(lines))
+                except Exception:
+                    pass
 
 class ArthDashboard(QMainWindow):
     def __init__(self):
@@ -453,6 +517,14 @@ class ArthDashboard(QMainWindow):
         if reply == QMessageBox.StandardButton.Yes: subprocess.run(cmd, shell=True)
 
 if __name__ == "__main__":
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    os.makedirs(FF_THEMES, exist_ok=True)
+    
+    check_and_install_dependencies()
+    setup_repo()
+    setup_waybar_colors()
+    
     app = QApplication(sys.argv)
-    win = ArthDashboard(); win.show()
+    win = ArthDashboard()
+    win.show()
     sys.exit(app.exec())
