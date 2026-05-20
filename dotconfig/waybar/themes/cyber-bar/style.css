@@ -1,5 +1,4 @@
-@import "/home/omarb_52/.cache/wal/colors-waybar.css";
-
+import "colors.css";
 * {
     border: none;
     font-family: "JetBrainsMono Nerd Font";
@@ -12,7 +11,7 @@ window#waybar {
     background-color: transparent;
 }
 
-#custom-launcher, #cpu, #memory, #custom-media, #workspaces, #pulseaudio, #network, #clock, #custom-power {
+#custom-launcher, #cpu, #memory, #custom-media, #workspaces, #pulseaudio, #network, #clock, #custom-pow>
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     padding: 0 15px;
