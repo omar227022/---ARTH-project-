@@ -17,7 +17,7 @@
         "format": "{icon}", "icon-size": 22, "on-click": "activate"
     },
     "mpris": {
-        "format": "󰎆 {title}", 
+        "format": "󰎆 {title}",
         "max-length": 15,
         "ellipsis": ".."
     },
@@ -27,11 +27,11 @@
         "format": "{icon} {capacity}%",
         "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
     },
-    "network": { 
-        "format-wifi": " لاسلكي", 
+    "network": {
+        "format-wifi": " لاسلكي",
         "format-ethernet": "󰈀 سلكي",
-        "format-disconnected": "⚠ مفصول" 
+        "format-disconnected": "⚠ مفصول"
     },
     "pulseaudio": { "format": "{icon} {volume}%", "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] } },
     "clock": { "format": "{:%I:%M %p}" }
-}
+}c
