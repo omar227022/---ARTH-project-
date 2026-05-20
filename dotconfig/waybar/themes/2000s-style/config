@@ -12,34 +12,33 @@
     "modules-right": ["mpris", "pulseaudio", "network", "tray"],
 
     "custom/launcher": {
-        "format": "🫧", 
+        "format": "󰀻 ",
         "on-click": "wofi --show drun "
     },
 
     "mpris": {
-        "format": " 💿 {artist} - {title} ",
-        "format-paused": " ⏸️ {artist} - {title} ",
+        "format": "󰝚  {artist} - {title} ",
+        "format-paused": "󰏤  {artist} - {title} ",
         "max-length": 30,
         "on-click": "playerctl play-pause"
     },
 
     "network": {
-        "format-wifi": "", // أيقونة الواي فاي
-        "format-ethernet": "󰈀", // أيقونة الكيبل
-        "format-disconnected": "󰖪", // أيقونة الانقطاع
+        "format-wifi": " ",
+        "format-ethernet": "󰈀 ",
+        "format-disconnected": "󰖪 ",
         "tooltip-format": "{essid} ({signalStrength}%)"
     },
 
     "pulseaudio": {
-        "format": "{icon} {volume}%", // قائمة الصوت مع النسبة
+        "format": "{icon} {volume}%",
         "format-icons": {
-            "default": ["", "", ""]
+            "default": ["", "", " "]
         },
-        "on-click": "pavucontrol" // يفتح لك إعدادات الصوت الكاملة
+        "on-click": "pavucontrol"
     },
 
     "clock": {
-        "format": "{:%I:%M %p}"
+        "format": "󱑂  {:%I:%M %p}"
     }
 }
-
