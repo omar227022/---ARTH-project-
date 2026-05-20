@@ -1,27 +1,45 @@
-@import url("/home/omarb_52/.cache/wal/colors-waybar.css");
-* { 
-    border: none; border-radius: 0; 
+@import "colors.css";
+* {
+    border: none;
+    border-radius: 0;
     font-family: "Monocraft", "VT323", "JetBrains Mono Nerd Font";
-    font-size: 15px; /* كبرنا الخط شوي */
+    font-size: 15px;
 }
-window#waybar { background: transparent; }
+
+window#waybar {
+    background: transparent;
+}
+
 #custom-launcher, #workspaces, #taskbar, #mpris, #cpu, #memory, #battery, #pulseaudio, #network, #clock {
     background: alpha(@color7, 0.9);
     color: @color0;
     border: 1px solid alpha(@color0, 0.1);
-    border-radius: 25px; /* دوران كامل وفخم */
+    border-radius: 25px;
     padding: 4px 18px;
-    margin: 6px 10px; /* تباعد مريح */
+    margin: 6px 10px;
     font-weight: bold;
 }
-#custom-launcher { 
-    background: @color1; 
-    color: @color7; 
-    font-family: "Monocraft"; /* خط مربعات للتطبيقات */
+
+#custom-launcher {
+    background: @color1;
+    color: @color7;
+    font-family: "Monocraft";
 }
+
 #network {
-    font-family: "Monocraft"; /* خط مربعات للنت (سلكي/لاسلكي) */
+    font-family: "Monocraft";
 }
-#workspaces button { color: @color0; padding: 0 6px; }
-#workspaces button.active { color: @color1; font-weight: 900; }
-#taskbar button { padding: 0 8px; }
+
+#workspaces button {
+    color: @color0;
+    padding: 0 6px;
+}
+
+#workspaces button.active {
+    color: @color1;
+    font-weight: 900;
+}
+
+#taskbar button {
+    padding: 0 8px;
+}
